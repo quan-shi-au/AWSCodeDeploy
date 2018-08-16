@@ -61,8 +61,8 @@ if (Test-Path $TargetPath)
     New-Item -ItemType Directory -Force -Path $BackupPath
     Copy-Item -Path "$TargetPath" -Destination "$BackupPath" -recurse -Force
 
-    #Write-Host "Remove files from $Targetpath..."
-    #Remove-Item "$TargetPath" -Recurse -Force
+    Write-Host "Remove files from $Targetpath..."
+    Remove-Item "$TargetPath" -Recurse -Force
 }
 else 
 {
