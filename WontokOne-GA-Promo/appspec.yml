@@ -5,9 +5,8 @@ files:
     destination: c:\inetpub\wwwroot\WontokOne_GA_Promo
 hooks:
   BeforeInstall:
-    - location: \executeps.ps1
-      timeout: 900
+    - location: \StopAppPoolAndDeleteFile.ps1
   AfterInstall:
+    - location: \executeps.ps1
     - location: \executepost.ps1
-      timeout: 300
-      runas: root
+    - location: \StartAppPool.ps1
