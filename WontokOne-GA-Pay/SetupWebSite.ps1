@@ -16,33 +16,29 @@ if ($PSHOME -like "*SysWOW64*")
   Exit $LastExitCode
 }
 
-#Set-ExecutionPolicy RemoteSigned
 Import-Module WebAdministration
-$iisAppPoolName = "WontokAppPool"
+
+$GAPayAppPoolName = "WontokAppPool"
 $iisAppPoolDotNetVersion = "v4.0"
-$iisAppName = "WontokOne GA PAY"
+$GAPayWebSiteName = "WontokOne GA PAY"
 $iisHostName = "ga-pay.wontokone.com"
-$directoryPath = "c:\inetpub\wwwroot\WontokOne_GA_PAY"
-$IISApplicationName = "api"
-$IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_PAY\api"
+$GAPayWebFilePath = "c:\inetpub\wwwroot\WontokOne_GA_PAY"
+$GaApiApplicationName = "api"
+$GaApiApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_PAY\api"
 
 #default website settings
-$iisDefaultAppName = "recon"
-$defaultDirectoryPath = "c:\inetpub\wwwroot\recon"
-$defaultDirectoryIndexFile = "c:\inetpub\wwwroot\recon\index.html"
-$defaultAppPoolName = "ReconAppPool"
+$ReconAppName = "recon"
+$ReconWebFilePath = "c:\inetpub\wwwroot\recon"
+$ReconIndexFile = "c:\inetpub\wwwroot\recon\index.html"
+$ReconAppPoolName = "ReconAppPool"
 
-
-#create application directoryPath
-New-Item -ItemType Directory -Force -Path $directoryPath
-
-#create default application directoryPath
-New-Item -ItemType Directory -Force -Path $defaultDirectoryPath
-#create default application directoryPath - create index file
-New-Item -ItemType File -Force -Path $defaultDirectoryIndexFile
+# Create folder and files
+New-Item -ItemType Directory -Force -Path $GAPayWebFilePath
+New-Item -ItemType Directory -Force -Path $ReconWebFilePath
+New-Item -ItemType File -Force -Path $ReconIndexFile
 
 #navigate to the app pools root
-cd IIS:\AppPools\
+Set-Location IIS:\AppPools\
 
 #remove default Website if exists
 Get-WebSite -Name "Default Web Site" | Remove-WebSite -Confirm:$false -Verbose
@@ -50,63 +46,67 @@ Get-WebSite -Name "Default Website" | Remove-WebSite -Confirm:$false -Verbose
 Get-WebSite -Name "recon" | Remove-WebSite -Confirm:$false -Verbose
 
 #check if the app pool exists
-if (!(Test-Path $iisAppPoolName -pathType container))
+if (!(Test-Path $GAPayAppPoolName -pathType container))
 {
+    Write-Output "Create AppPool $GAPayAppPoolName"
      #create the app pool
-     $appPool = New-Item $iisAppPoolName
+     $appPool = New-Item $GAPayAppPoolName
      $appPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
-
+} else {
+    Write-Output "AppPool $GAPayAppPoolName already exists."
 }
 
 #Assign user to AppPool
 Set-ItemProperty IIS:\AppPools\WontokAppPool -name processModel -value @{userName="WontokAppPool";password="w0nt0k@123";identitytype=3}
 
 #create default website's app pool
-if (!(Test-Path $defaultAppPoolName -pathType container))
+if (!(Test-Path $ReconAppPoolName -pathType container))
 {
      #create the app pool
-     $appDefPool = New-Item $defaultAppPoolName
+     $appDefPool = New-Item $ReconAppPoolName
      $appDefPool | Set-ItemProperty -Name "managedRuntimeVersion" -Value $iisAppPoolDotNetVersion
 }
 
 #navigate to the sites root
-cd IIS:\Sites\
+Set-Location IIS:\Sites\
 
 #check if the site exists
-if (Test-Path $iisAppName -pathType container)
+if (Test-Path $GAPayWebSiteName -pathType container)
 {
 	#restart website
-    Write-Output "restart $IISApplicationName"
-	Stop-WebSite $IISApplicationName
-	Start-WebSite $IISApplicationName
+    Write-Output "restart $GaApiApplicationName"
+	Stop-WebSite $GaApiApplicationName
+	Start-WebSite $GaApiApplicationName
 	
-    Write-Output "restart $iisAppName"
-	Stop-WebSite $iisAppName 
-	Start-WebSite $iisAppName
+    Write-Output "restart $GAPayWebSiteName"
+	Stop-WebSite $GAPayWebSiteName 
+	Start-WebSite $GAPayWebSiteName
 	
     Write-Output "Sites already exist. exit."
 	
     return
+} else {
+    Write-Output "Create Web Site $GAPayWebSiteName"
 }
 
 #create the site
-#$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
-$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
-$iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
+#$iisApp = New-Item $GAPayWebSiteName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $GAPayWebFilePath
+$iisApp = New-Item $GAPayWebSiteName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $GAPayWebFilePath
+$iisApp | Set-ItemProperty -Name "applicationPool" -Value $GAPayAppPoolName
 
 #create default site
-$iisDefaultApp = New-Item $iisDefaultAppName -bindings @{protocol="http";bindingInformation=":80:"} -physicalPath $defaultDirectoryPath
-$iisDefaultApp | Set-ItemProperty -Name "applicationPool" -Value $defaultAppPoolName
+$iisDefaultApp = New-Item $ReconAppName -bindings @{protocol="http";bindingInformation=":80:"} -physicalPath $ReconWebFilePath
+$iisDefaultApp | Set-ItemProperty -Name "applicationPool" -Value $ReconAppPoolName
 
 #assign ports 433
-New-WebBinding -Name $iisAppName -IP "*" -Port 443 -Protocol https -HostHeader $iisHostName
+New-WebBinding -Name $GAPayWebSiteName -IP "*" -Port 443 -Protocol https -HostHeader $iisHostName
 
 #assign certificate
 #Set-Location IIS:\SslBindings
 #Get-ChildItem cert:\LocalMachine\MY | Where-Object {$_.Subject -match "CN=VM*"} | Select-Object -First 1 | New-Item 0.0.0.0!443 
 
 #create API application
-New-WebApplication $IISApplicationName -Site $iisAppName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
+New-WebApplication $GaApiApplicationName -Site $GAPayWebSiteName -ApplicationPool $GAPayAppPoolName -PhysicalPath $GaApiApplicationPath
 
 
 
