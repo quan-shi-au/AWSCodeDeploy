@@ -34,6 +34,8 @@ $ReconIndexFile = "c:\inetpub\wwwroot\recon\index.html"
 $ReconAppPoolName = "ReconAppPool"
 
 #check if the site exists
+Set-Location IIS:\Sites\
+
 if (Test-Path $GAPayWebSiteName -pathType container)
 {
     Write-Output "$GAPayWebSiteName Sites already exist. exit."
@@ -90,14 +92,14 @@ if ($MyCert)
 }
 
 # get the web binding of the site
-$binding = Get-WebBinding -Name $siteName -Protocol "https"
+$binding = Get-WebBinding -Name $GAPayWebSiteName -Protocol "https"
 
 if(!$binding)
 {
     Write-Host "Create SSL binding"
 
-    New-WebBinding -Name $siteName -IP "*" -Port 443 -Protocol https -HostHeader $hostName
-    $binding = Get-WebBinding -Name $siteName -Protocol "https"
+    New-WebBinding -Name $GAPayWebSiteName -IP "*" -Port 443 -Protocol https -HostHeader $hostName
+    $binding = Get-WebBinding -Name $GAPayWebSiteName -Protocol "https"
 
     # set the ssl certificate
      $binding.AddSslCertificate($MyCert.GetCertHashString(), "my")
