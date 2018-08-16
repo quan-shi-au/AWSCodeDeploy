@@ -32,6 +32,15 @@ $defaultDirectoryPath = "c:\inetpub\wwwroot\recon"
 $defaultDirectoryIndexFile = "c:\inetpub\wwwroot\recon\index.html"
 $defaultAppPoolName = "ReconAppPool"
 
+#navigate to the sites root
+cd IIS:\Sites\
+
+#check if the site exists
+if (Test-Path $iisAppName -pathType container)
+{
+    return
+}
+
 
 #create application directoryPath
 New-Item -ItemType Directory -Force -Path $directoryPath
@@ -71,12 +80,6 @@ if (!(Test-Path $defaultAppPoolName -pathType container))
 
 #navigate to the sites root
 cd IIS:\Sites\
-
-#check if the site exists
-if (Test-Path $iisAppName -pathType container)
-{
-    return
-}
 
 #create the site
 #$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath

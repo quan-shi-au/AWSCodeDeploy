@@ -5,5 +5,7 @@ files:
     destination: c:\inetpub\wwwroot\WontokOne_GA_API
 hooks:
   BeforeInstall:
+    - location: \StopAppPoolAndDeleteFile.ps1
+  AfterInstall:
     - location: \executeps.ps1
-      timeout: 900
+    - location: \StartAppPool.ps1
