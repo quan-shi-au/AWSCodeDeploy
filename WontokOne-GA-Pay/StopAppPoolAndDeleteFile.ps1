@@ -28,7 +28,8 @@ if ((Get-WebAppPoolState $AppPoolName).Value -ne 'Stopped') {
     
     Stop-WebAppPool -Name $AppPoolName
 
-    if ((Get-WebAppPoolState $AppPoolName).Value -ne 'Stopped') {
+    while ((Get-WebAppPoolState $AppPoolName).Value -ne 'Stopped') {
+        Write-Host "Wait $AppPoolName to stop."
         Start-Sleep -Seconds 1
     }
 
