@@ -29,11 +29,11 @@ $IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo\api"
 
 #navigate to the sites root
 cd IIS:\Sites\
-
-#create API applications
-New-WebApplication $IISApplicationName -Site $iisAppName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
-
-
+if (-Not (Test-Path $iisAppName -pathType container))
+{
+	#create API applications
+	New-WebApplication $IISApplicationName -Site $iisAppName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
+}
 
 #iisreset
  invoke-command -scriptblock {iisreset}

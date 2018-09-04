@@ -83,14 +83,21 @@ if (Test-Path $iisAppName -pathType container)
     return
 }
 
-#create the site
+#create webapplication site bindings
 #$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
-$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
+$iisAppName_bindings = @(
+		@{protocol="http";bindingInformation=":80:" + $iisHostName},
+		@{protocol="http";bindingInformation=":88:"}
+		)
+$iisApp = New-Item $iisAppName -bindings $iisAppName_bindings -physicalPath $directoryPath
 $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
 
 #create default site
 $iisDefaultApp = New-Item $iisDefaultAppName -bindings @{protocol="http";bindingInformation=":80:"} -physicalPath $defaultDirectoryPath
 $iisDefaultApp | Set-ItemProperty -Name "applicationPool" -Value $defaultAppPoolName
+
+#create custom inbound firewall allow rule on port 88
+New-NetFirewallRule -DisplayName "World Wide Web (Port 88 - Inbound traffic)" -Direction Inbound -LocalPort 88 -Protocol TCP -Action Allow
 
 #assign ports 433
 #New-WebBinding -Name $iisAppName -IP "*" -Port 443 -Protocol https -HostHeader $iisHostName
