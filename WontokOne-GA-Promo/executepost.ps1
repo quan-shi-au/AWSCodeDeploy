@@ -16,24 +16,20 @@ if ($PSHOME -like "*SysWOW64*")
   Exit $LastExitCode
 }
 
-#Set-ExecutionPolicy RemoteSigned
 Import-Module WebAdministration
+
 $iisAppPoolName = "WontokAppPool"
-$iisAppPoolDotNetVersion = "v4.0"
 $iisAppName = "WontokOne GA Promo"
-$iisHostName = "ga.wontokone.com"
-$directoryPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo"
 $IISApplicationName = "api"
 $IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo\api"
- 
 
-#navigate to the sites root
-cd IIS:\Sites\
-if (-Not (Test-Path $iisAppName -pathType container))
+$apiApplication = Get-WebApplication -Site $iisAppName -Name $IISApplicationName
+if ($apiApplication)
 {
-	#create API applications
+  Write-Host "Application - $IISApplicationName already exists."
+} else {
+  Write-Host "Create Application - $IISApplicationName..."
 	New-WebApplication $IISApplicationName -Site $iisAppName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
 }
 
-#iisreset
- invoke-command -scriptblock {iisreset}
+invoke-command -scriptblock {iisreset}
