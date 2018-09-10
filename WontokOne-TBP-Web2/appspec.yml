@@ -1,0 +1,15 @@
+version: 0.0
+os: windows
+files:
+  - source: \Wontok.TSafe.Web
+    destination: c:\inetpub\wwwroot\Wontok.TSafe.Web
+  - source: \Wontok.Tools
+    destination: c:\Wontok.Tools
+hooks:
+  BeforeInstall:
+    - location: \pre.ps1
+  AfterInstall:
+    - location: \executeps.ps1
+      timeout: 900
+    - location: \EventNotificationDeploy.ps1
+      timeout: 900
