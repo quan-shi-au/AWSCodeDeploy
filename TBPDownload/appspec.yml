@@ -1,0 +1,9 @@
+version: 0.0
+os: windows
+files:
+  - source: \dl.protectsw.telstra.com.au
+    destination: c:\inetpub\wwwroot\dl.protectsw.telstra.com.au
+hooks:
+  BeforeInstall:
+    - location: \executeps.ps1
+      timeout: 900
