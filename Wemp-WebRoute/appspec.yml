@@ -1,0 +1,9 @@
+version: 0.0
+os: windows
+files:
+  - source: \wemproute
+    destination: c:\inetpub\wwwroot\wemproute
+hooks:
+  BeforeInstall:
+    - location: \appstart.ps1
+      timeout: 900

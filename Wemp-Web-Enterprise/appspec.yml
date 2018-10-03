@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: WEMP_WEB
+    destination: /var/www/wempapp
+hooks:
+  AfterInstall:
+    - location: application.sh
+      timeout: 600
+      runas: root

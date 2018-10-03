@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: WEMP_API
+    destination: /var/www/wemp_app
+hooks:
+  AfterInstall:
+    - location: application.sh
+      timeout: 600
+      runas: root
+  ApplicationStart:
+    - location: servicerun.sh
+      timeout: 150
+      runas: root
