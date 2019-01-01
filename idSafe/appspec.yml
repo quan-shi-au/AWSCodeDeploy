@@ -1,0 +1,14 @@
+version: 0.0
+os: windows
+files:
+  - source: \release
+    destination: c:\inetpub\wwwroot\Nop.Web
+hooks:
+  BeforeInstall:
+    - location: \executeps.ps1
+      timeout: 900
+      runas: root
+  AfterInstall:
+    - location: \executepost.ps1
+      timeout: 300
+      runas: root
