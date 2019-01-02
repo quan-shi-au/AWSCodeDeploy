@@ -21,7 +21,7 @@ Import-Module WebAdministration
 $iisAppPoolName = "WontokAppPool"
 $iisAppName = "WontokOne GA Promo"
 $IISApplicationName = "api"
-$IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo\api"
+$IISApplicationPath = "c:\inetpub\wwwroot\idSafe\api"
 
 $apiApplication = Get-WebApplication -Site $iisAppName -Name $IISApplicationName
 if ($apiApplication)

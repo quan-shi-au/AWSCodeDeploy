@@ -15,7 +15,7 @@ if ($PSHOME -like "*SysWOW64*")
 
 Import-Module WebAdministration
 
-$TargetPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo"
+$TargetPath = "c:\inetpub\wwwroot\idSafe"
 $uniqueFolder=[guid]::NewGuid()
 $RootBackupPath="c:\Temp\Backup"
 $BackupPath="$RootBackupPath\$uniqueFolder"

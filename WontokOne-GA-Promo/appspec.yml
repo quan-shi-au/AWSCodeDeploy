@@ -2,7 +2,7 @@ version: 0.0
 os: windows
 files:
   - source: \release
-    destination: c:\inetpub\wwwroot\WontokOne_GA_Promo
+    destination: c:\inetpub\wwwroot\idSafe
 hooks:
   BeforeInstall:
     - location: \StopAppPoolAndDeleteFile.ps1

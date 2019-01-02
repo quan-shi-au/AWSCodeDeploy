@@ -15,7 +15,8 @@ if ($PSHOME -like "*SysWOW64*")
 
 Import-Module WebAdministration
 
-$TargetPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo"
+$GaPath = "C:\inetpub\wwwroot\WontokOne_GA_Promo"
+$TargetPath = "c:\inetpub\wwwroot\idSafe"
 $uniqueFolder=[guid]::NewGuid()
 $RootBackupPath="c:\Temp\Backup"
 $BackupPath="$RootBackupPath\$uniqueFolder"
@@ -62,7 +63,7 @@ if (Test-Path $TargetPath)
     New-Item -ItemType Directory -Force -Path $BackupPath
     Copy-Item -Path "$TargetPath" -Destination "$BackupPath" -recurse -Force
 
-    Write-Host "Remove files from $Targetpath..."
+    Write-Host "Remove files from $TargetPath..."
     Remove-Item "$TargetPath" -Recurse -Force
 }
 else 
@@ -70,3 +71,9 @@ else
     Write-Host "Error: $TargetPath doesnot exist"
 }
 
+# Remove not needed GA path
+if (Test-Path $GaPath)
+{
+    Write-Host "Remove files from $GaPath..."
+    Remove-Item "$GaPath" -Recurse -Force
+}
