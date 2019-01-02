@@ -18,13 +18,13 @@ if ($PSHOME -like "*SysWOW64*")
 
 #Set-ExecutionPolicy RemoteSigned
 Import-Module WebAdministration
-$iisAppPoolName = "WontokAppPool"
+$iisAppPoolName = "wtkappadmin"
 $iisAppPoolDotNetVersion = "v4.0"
-$iisAppName = "WontokOne GA Promo"
-$iisHostName = "ga.wontokone.com"
-$directoryPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo"
+$iisAppName = "idSafeV4"
+$iisHostName = "idsafe.com.au"
+$directoryPath = "c:\inetpub\wwwroot\Nop.Web"
 $IISApplicationName = "api"
-$IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo\api"
+$IISApplicationPath = "c:\inetpub\wwwroot\Nop.Web\api"
 
 #default website settings
 $iisDefaultAppName = "recon"
@@ -49,8 +49,9 @@ cd IIS:\AppPools\
 #remove default Website if exists
 Get-WebSite -Name "Default Web Site" | Remove-WebSite -Confirm:$false -Verbose
 Get-WebSite -Name "Default Website" | Remove-WebSite -Confirm:$false -Verbose
-# Get-WebSite -Name "recon" | Remove-WebSite -Confirm:$false -Verbose
-
+Get-WebSite -Name "idSafeComingSoon" | Remove-WebSite -Confirm:$false -Verbose
+#Get-WebSite -Name "recon" | Remove-WebSite -Confirm:$false -Verbose
+Get-WebSite -Name "idSafe" | Remove-WebSite -Confirm:$false -Verbose
 
 # #check if the app pool exists
 if (!(Test-Path $iisAppPoolName -pathType container))
@@ -83,21 +84,14 @@ if (Test-Path $iisAppName -pathType container)
     return
 }
 
-#create webapplication site bindings
+#create the site
 #$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
-$iisAppName_bindings = @(
-		@{protocol="http";bindingInformation=":80:" + $iisHostName},
-		@{protocol="http";bindingInformation=":88:"}
-		)
-$iisApp = New-Item $iisAppName -bindings $iisAppName_bindings -physicalPath $directoryPath
+$iisApp = New-Item $iisAppName -bindings @{protocol="http";bindingInformation=":80:" + $iisHostName} -physicalPath $directoryPath
 $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
 
 #create default site
 $iisDefaultApp = New-Item $iisDefaultAppName -bindings @{protocol="http";bindingInformation=":80:"} -physicalPath $defaultDirectoryPath
 $iisDefaultApp | Set-ItemProperty -Name "applicationPool" -Value $defaultAppPoolName
-
-#create custom inbound firewall allow rule on port 88
-New-NetFirewallRule -DisplayName "World Wide Web (Port 88 - Inbound traffic)" -Direction Inbound -LocalPort 88 -Protocol TCP -Action Allow
 
 #assign ports 433
 #New-WebBinding -Name $iisAppName -IP "*" -Port 443 -Protocol https -HostHeader $iisHostName
