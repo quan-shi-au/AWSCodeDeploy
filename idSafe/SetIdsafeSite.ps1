@@ -59,6 +59,7 @@ if (!(Test-Path $iisAppPoolName -pathType container))
 
 #Assign user to AppPool
 Set-ItemProperty IIS:\AppPools\WontokAppPool -name processModel -value @{userName="WontokAppPool";password="w0nt0k@123";identitytype=3}
+Set-ItemProperty IIS:\AppPools\WontokAppPool -name recycling.disallowOverlappingRotation -value true
 
 #create default website's app pool
 if (!(Test-Path $defaultAppPoolName -pathType container))
