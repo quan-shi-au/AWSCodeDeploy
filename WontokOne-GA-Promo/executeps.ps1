@@ -22,9 +22,9 @@ $iisAppPoolName = "WontokAppPool"
 $iisAppPoolDotNetVersion = "v4.0"
 $iisAppName = "WontokOne GA Promo"
 $iisHostName = "ga.wontokone.com"
-$directoryPath = "c:\inetpub\wwwroot\idSafe"
+$directoryPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo"
 $IISApplicationName = "api"
-$IISApplicationPath = "c:\inetpub\wwwroot\idSafe\api"
+$IISApplicationPath = "c:\inetpub\wwwroot\WontokOne_GA_Promo\api"
 
 #default website settings
 $iisDefaultAppName = "recon"
