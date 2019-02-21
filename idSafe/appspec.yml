@@ -5,8 +5,10 @@ files:
     destination: c:\inetpub\wwwroot\idSafe
 hooks:
   BeforeInstall:
+    - location: \deregister_instances.ps1
     - location: \StopAppPoolAndDeleteFile.ps1
   AfterInstall:
     - location: \SetIdsafeSite.ps1
     - location: \SetIdsafeApi.ps1
     - location: \StartAppPool.ps1
+    - location: \register_instances.ps1
