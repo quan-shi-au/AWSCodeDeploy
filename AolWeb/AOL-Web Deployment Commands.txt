@@ -1,0 +1,3 @@
+aws deploy push --application-name AOL-Web --description "Code Deployment of AOL-Web App v1.0" --ignore-hidden-files --s3-location s3://aol-codedeploy-application-artifactbucket-1g45re9gy7eum/AOL-Web-1_0.zip
+
+aws deploy create-deployment --application-name AOL-Web --s3-location bucket=aol-codedeploy-application-artifactbucket-1g45re9gy7eum,key=AOL-Web-1_0.zip,bundleType=zip --deployment-group-name AOL-Web-DG --deployment-config-name CodeDeployDefault.OneAtATime --description "Code Deployment of AOL-Web App v1.0"
