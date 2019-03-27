@@ -19,17 +19,17 @@ if ($PSHOME -like "*SysWOW64*")
 Import-Module WebAdministration
 
 $iisAppPoolName = "WontokAppPool"
-$idSafeSiteName = "AolWeb"
+$aolWebSiteName = "AolWeb"
 $IISApplicationName = "api"
 $IISApplicationPath = "c:\inetpub\wwwroot\AolWeb\api"
 
-$apiApplication = Get-WebApplication -Site $idSafeSiteName -Name $IISApplicationName
+$apiApplication = Get-WebApplication -Site $aolWebSiteName -Name $IISApplicationName
 if ($apiApplication)
 {
   Write-Host "Application - $IISApplicationName already exists."
 } else {
   Write-Host "Create Application - $IISApplicationName..."
-	New-WebApplication $IISApplicationName -Site $idSafeSiteName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
+	New-WebApplication $IISApplicationName -Site $aolWebSiteName -ApplicationPool $iisAppPoolName -PhysicalPath $IISApplicationPath
 }
 
 invoke-command -scriptblock {iisreset}
