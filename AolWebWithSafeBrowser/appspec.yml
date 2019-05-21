@@ -1,0 +1,12 @@
+version: 0.0
+os: windows
+files:
+  - source: \release
+    destination: c:\inetpub\wwwroot\AolWeb
+hooks:
+  BeforeInstall:
+    - location: \StopAppPoolAndDeleteFile.ps1
+  AfterInstall:
+    - location: \SetAolWebSite.ps1
+    - location: \SetAolWebApi.ps1
+    - location: \StartAppPool.ps1
