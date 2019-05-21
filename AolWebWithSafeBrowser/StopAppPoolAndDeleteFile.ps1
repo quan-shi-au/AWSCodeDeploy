@@ -21,6 +21,7 @@ $uniqueFolder=[guid]::NewGuid()
 $RootBackupPath="c:\Temp\Backup"
 $BackupPath="$RootBackupPath\$uniqueFolder"
 $AppPoolName="WontokAppPool"
+$safeBrowserAppPoolName = "WontokSafeBrowser"
 
 # Stop the AppPool
 if ((Get-WebAppPoolState $AppPoolName).Value -ne 'Stopped') {
@@ -40,6 +41,26 @@ else {
     Write-Host "$AppPoolName already stopped"
 }
 
+# Stop the SafeBrowser AppPool
+if ((Get-WebAppPoolState $safeBrowserDirectoryPath).Value -ne 'Stopped') {
+
+    Write-Host "Shut Down App Pool - $safeBrowserDirectoryPath..."
+    
+    Stop-WebAppPool -Name $safeBrowserDirectoryPath
+
+    while ((Get-WebAppPoolState $safeBrowserDirectoryPath).Value -ne 'Stopped') {
+        Write-Host "Wait $safeBrowserDirectoryPath to stop."
+        Start-Sleep -Seconds 1
+    }
+
+    Write-Host "$safeBrowserDirectoryPath stopped."
+}
+else {
+    Write-Host "$safeBrowserDirectoryPath already stopped"
+}
+
+
+# create backup folder name
 if (Test-Path $RootBackupPath)
 {
     Write-Host "$RootBackupPath already exists."

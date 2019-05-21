@@ -16,6 +16,7 @@ if ($PSHOME -like "*SysWOW64*")
 Import-Module WebAdministration
 
 $AppPoolName="WontokAppPool"
+$safeBrowserAppPoolName = "WontokSafeBrowser"
 
 # Start AppPool
 if ((Get-WebAppPoolState $AppPoolName).Value -ne 'Started') {
@@ -28,4 +29,17 @@ if ((Get-WebAppPoolState $AppPoolName).Value -ne 'Started') {
 }
 else {
     Write-Host "AppPool $AppPoolName already started"
+}
+
+# Start SafeBrowser AppPool
+if ((Get-WebAppPoolState $safeBrowserDirectoryPath).Value -ne 'Started') {
+    Start-WebAppPool -Name $safeBrowserDirectoryPath
+
+    while ((Get-WebAppPoolState $safeBrowserDirectoryPath).Value -ne 'Started') {
+        Start-Sleep -Seconds 1
+    }
+    Write-Host "AppPool $safeBrowserDirectoryPath started."
+}
+else {
+    Write-Host "AppPool $safeBrowserDirectoryPath already started"
 }

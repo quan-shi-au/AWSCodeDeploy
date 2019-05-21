@@ -9,4 +9,5 @@ hooks:
   AfterInstall:
     - location: \SetAolWebSite.ps1
     - location: \SetAolWebApi.ps1
+    - location: \SetSafeBrowserWebSite.ps1
     - location: \StartAppPool.ps1
