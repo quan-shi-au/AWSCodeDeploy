@@ -37,9 +37,6 @@ if (!(Test-Path $safeBrowserAppPoolName -pathType container))
 
 }
 
-# Set "Enable Parent Paths"
-Set-WebConfigurationProperty -PSPath MACHINE/WEBROOT/APPHOST -Location $safeBrowserWebSiteName -Filter system.webServer/asp -Name enableParentPaths -Value $true
-
 #navigate to the sites root
 cd IIS:\Sites\
 
@@ -56,4 +53,7 @@ $iisAppName_bindings = @(
 		)
 $iisApp = New-Item $safeBrowserWebSiteName -bindings $iisAppName_bindings -physicalPath $safeBrowserDirectoryPath
 $iisApp | Set-ItemProperty -Name "applicationPool" -Value $safeBrowserAppPoolName
+
+# Set "Enable Parent Paths"
+Set-WebConfigurationProperty -PSPath MACHINE/WEBROOT/APPHOST -Location $safeBrowserWebSiteName -Filter system.webServer/asp -Name enableParentPaths -Value $true
 
