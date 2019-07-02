@@ -22,6 +22,7 @@ $iisAppPoolName = "WontokAppPool"
 $iisAppPoolDotNetVersion = "v4.0"
 $idSafeSiteName = "idSafe"
 $iisHostName = "www.idsafe.com.au"
+$iisNonWwwHostName = "idsafe.com.au"
 $directoryPath = "c:\inetpub\wwwroot\idSafe"
 
 #default website settings
@@ -81,8 +82,9 @@ if (Test-Path $idSafeSiteName -pathType container)
 
 #create webapplication site bindings
 $iisAppName_bindings = @(
-		@{protocol="http";bindingInformation=":80:" + $iisHostName},
-		@{protocol="http";bindingInformation=":88:"}
+  @{protocol="http";bindingInformation=":80:" + $iisHostName},
+  @{protocol="http";bindingInformation=":80:" + $iisNonWwwHostName},
+  @{protocol="http";bindingInformation=":88:"}
 		)
 $iisApp = New-Item $idSafeSiteName -bindings $iisAppName_bindings -physicalPath $directoryPath
 $iisApp | Set-ItemProperty -Name "applicationPool" -Value $iisAppPoolName
