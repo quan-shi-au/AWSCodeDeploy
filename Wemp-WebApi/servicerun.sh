@@ -1,5 +1,5 @@
 #nginx redo
-sed -i -e 's!#CORS-ADDED BSAYEJ!if ($request_method ~* "(GET|POST|DELETE)") { add_header "Access-Control-Allow-Origin"  *;}!g' /etc/nginx/conf.d/default.conf
+sed -i -e 's!#CORS-ADDED BSAYEJ!if ($request_method ~* "(GET|POST|DELETE)") { add_header "Access-Control-Allow-Origin"  * always;}!g' /etc/nginx/conf.d/default.conf
 sed -i -e 's!if ($http_x_forwarded_proto = "http") { return 301 https://$server_name$request_uri$http_x_forwarded_proto;}!!g' /etc/nginx/conf.d/default.conf
 sed -i -e 's!if ($http_x_forwarded_proto = "http") { return 301 https://$server_name$request_uri;}!!g' /etc/nginx/conf.d/default.conf
 sed -i -e 's!enterpriseapi.wontok.net;!enterpriseapi.wontok.net; \n if ($http_x_forwarded_proto = "http") { return 301 https://$server_name$request_uri;}\n!g' /etc/nginx/conf.d/default.conf

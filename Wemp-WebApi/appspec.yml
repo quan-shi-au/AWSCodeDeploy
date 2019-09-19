@@ -4,8 +4,12 @@ files:
   - source: WEMP_API
     destination: /var/www/wemp_app
 hooks:
-  AfterInstall:
+  BeforeInstall:
     - location: application.sh
+      timeout: 600
+      runas: root
+  AfterInstall:
+    - location: application_after.sh
       timeout: 600
       runas: root
   ApplicationStart:
